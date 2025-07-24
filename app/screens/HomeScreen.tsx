@@ -1,15 +1,12 @@
 import React from 'react';
-import { Text, View } from 'react-native';
-import { useTheme } from '../../contexts/ThemeContext.tsx';
+import { Text } from 'react-native';
+import Container from '../components/ui/Container.tsx';
 
 const HomeScreen = () => {
-  const styles = useTheme()
-  console.log(styles);
-
   return (
-    <View>
+    <Container>
       <Text>Home Screen</Text>
-    </View>
+    </Container>
   );
 };
 
