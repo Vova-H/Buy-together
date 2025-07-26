@@ -17,16 +17,26 @@ import { useStackNavigation } from '../hooks/useStackNavigation.ts';
 import { loginSchema } from '../utils/validation/authSchema.ts';
 import {
   getAuth,
-  signInWithEmailAndPassword,
   GoogleAuthProvider,
   signInWithCredential,
+  signInWithEmailAndPassword,
 } from '@react-native-firebase/auth';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 
-interface GoogleUserInfo {
-  idToken?: string;
-
-  [key: string]: any;
+interface GoogleSignInResponse {
+  type: 'success';
+  data: {
+    idToken: string;
+    scopes: string[];
+    serverAuthCode: string | null;
+    user: {
+      photo: string;
+      givenName: string;
+      familyName: string;
+      email: string;
+      id: string;
+    };
+  };
 }
 
 const LoginScreen = () => {
@@ -34,12 +44,8 @@ const LoginScreen = () => {
 
   useEffect(() => {
     GoogleSignin.configure({
-      scopes: ['https://www.googleapis.com/auth/drive'],
       webClientId:
         '39271153841-otqskrvuvar6pt4b9c44a5e2d9h0ci27.apps.googleusercontent.com',
-      offlineAccess: true,
-      forceCodeForRefreshToken: true,
-      profileImageSize: 120,
     });
   }, []);
 
@@ -62,13 +68,17 @@ const LoginScreen = () => {
   const signInWithGoogle = async () => {
     try {
       await GoogleSignin.hasPlayServices();
-      const userInfo = (await GoogleSignin.signIn()) as GoogleUserInfo;
-      const idToken = userInfo.idToken;
+      const userInfo = (await GoogleSignin.signIn()) as GoogleSignInResponse;
+      const idToken = userInfo?.data?.idToken;
+      if (!idToken) {
+        throw new Error('Не вдалося отримати idToken');
+      }
+
       const googleCredential = GoogleAuthProvider.credential(idToken);
       await signInWithCredential(getAuth(), googleCredential);
     } catch (error: any) {
-      Alert.alert('Помилка Google авторизації', error.message);
-      console.log(error);
+      console.log('Google Sign-In Error:', error);
+      Alert.alert('Google Sign-In Error', error?.message ?? 'Unknown error');
     }
   };
 
@@ -195,7 +205,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#ccc',
   },
   googleButton: {
-    backgroundColor: '#DB4437', // Google red
+    backgroundColor: '#DB4437',
   },
   bottom: {
     flexDirection: 'row',
