@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
   Alert,
   KeyboardAvoidingView,
@@ -15,14 +15,33 @@ import Button from '../components/ui/Button';
 import { colors, spacing, typography } from '../constants';
 import { useStackNavigation } from '../hooks/useStackNavigation.ts';
 import { loginSchema } from '../utils/validation/authSchema.ts';
-
 import {
   getAuth,
   signInWithEmailAndPassword,
+  GoogleAuthProvider,
+  signInWithCredential,
 } from '@react-native-firebase/auth';
+import { GoogleSignin } from '@react-native-google-signin/google-signin';
+
+interface GoogleUserInfo {
+  idToken?: string;
+
+  [key: string]: any;
+}
 
 const LoginScreen = () => {
   const { navigate } = useStackNavigation();
+
+  useEffect(() => {
+    GoogleSignin.configure({
+      scopes: ['https://www.googleapis.com/auth/drive'],
+      webClientId:
+        '39271153841-otqskrvuvar6pt4b9c44a5e2d9h0ci27.apps.googleusercontent.com',
+      offlineAccess: true,
+      forceCodeForRefreshToken: true,
+      profileImageSize: 120,
+    });
+  }, []);
 
   const goToRegisterScreen = () => {
     navigate('Register');
@@ -39,6 +58,20 @@ const LoginScreen = () => {
       Alert.alert('Помилка при вході', error.message);
     }
   };
+
+  const signInWithGoogle = async () => {
+    try {
+      await GoogleSignin.hasPlayServices();
+      const userInfo = (await GoogleSignin.signIn()) as GoogleUserInfo;
+      const idToken = userInfo.idToken;
+      const googleCredential = GoogleAuthProvider.credential(idToken);
+      await signInWithCredential(getAuth(), googleCredential);
+    } catch (error: any) {
+      Alert.alert('Помилка Google авторизації', error.message);
+      console.log(error);
+    }
+  };
+
   return (
     <KeyboardAvoidingView
       style={styles.container}
@@ -91,6 +124,18 @@ const LoginScreen = () => {
               </TouchableOpacity>
 
               <Button title="Увійти" onPress={handleSubmit} />
+
+              <View style={styles.orContainer}>
+                <View style={styles.line} />
+                <Text style={styles.orText}>АБО</Text>
+                <View style={styles.line} />
+              </View>
+
+              <Button
+                title="Увійти через Google"
+                onPress={signInWithGoogle}
+                style={styles.googleButton}
+              />
             </>
           )}
         </Formik>
@@ -134,6 +179,23 @@ const styles = StyleSheet.create({
   forgotText: {
     fontSize: typography.fontSize.sm,
     color: colors.light.primary,
+  },
+  orContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginVertical: spacing.md,
+  },
+  orText: {
+    marginHorizontal: spacing.sm,
+    color: colors.light.textSecondary,
+  },
+  line: {
+    flex: 1,
+    height: 1,
+    backgroundColor: '#ccc',
+  },
+  googleButton: {
+    backgroundColor: '#DB4437', // Google red
   },
   bottom: {
     flexDirection: 'row',
