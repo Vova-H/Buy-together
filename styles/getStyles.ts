@@ -9,18 +9,40 @@ export const getStyles = (theme: 'light' | 'dark') =>
       padding: spacing.md,
       justifyContent: 'center',
       alignItems: 'center',
+
     },
 
     card: {
-      backgroundColor: colors[theme].backgroundSecondary,
-      padding: spacing.md,
-      borderRadius: 12,
+      width: '100%',
+      backgroundColor: theme === 'dark' ? '#2b2b2b' : '#fff',
+      padding: 16,
+      borderRadius: 16,
+      marginBottom: 12,
       shadowColor: '#000',
       shadowOpacity: 0.1,
-      shadowRadius: 4,
-      shadowOffset: { width: 0, height: 2 },
-      elevation: 2,
-      marginBottom: spacing.md,
+      shadowRadius: 6,
+      elevation: 3,
+      flexDirection: 'column',
+    },
+    cardHeader: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      marginBottom: 8,
+    },
+    cardTitle: {
+      fontSize: 18,
+      fontWeight: '600',
+      color: theme === 'dark' ? '#fff' : '#000',
+    },
+    accessInfo: {
+      flexDirection: 'row',
+      alignItems: 'center',
+    },
+    accessText: {
+      fontSize: 14,
+      color: theme === 'dark' ? '#aaa' : '#555',
+      marginLeft: 4,
     },
 
     title: {
@@ -84,5 +106,17 @@ export const getStyles = (theme: 'light' | 'dark') =>
       color: colors[theme].error,
       fontSize: typography.fontSize.sm,
       marginTop: spacing.xs,
+    },
+    fab: {
+      position: 'absolute',
+      right: spacing.lg,
+      bottom: spacing.xl,
+      width: 56,
+      height: 56,
+      borderRadius: 28,
+      justifyContent: 'center',
+      alignItems: 'center',
+      elevation: 5,
+      backgroundColor: colors[theme].primary,
     },
   });
