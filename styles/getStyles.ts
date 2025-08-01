@@ -9,7 +9,6 @@ export const getStyles = (theme: 'light' | 'dark') =>
       padding: spacing.md,
       justifyContent: 'center',
       alignItems: 'center',
-
     },
 
     card: {
@@ -31,7 +30,7 @@ export const getStyles = (theme: 'light' | 'dark') =>
       marginBottom: 8,
     },
     cardTitle: {
-      fontSize: 18,
+      fontSize: typography.fontSize.md,
       fontWeight: '600',
       color: theme === 'dark' ? '#fff' : '#000',
     },
@@ -45,11 +44,18 @@ export const getStyles = (theme: 'light' | 'dark') =>
       marginLeft: 4,
     },
 
-    title: {
+    extraTitle: {
       fontSize: typography.fontSize.xl,
       fontWeight: typography.fontWeight.bold,
       color: colors[theme].text,
-      marginBottom: spacing.sm,
+      marginBottom: spacing.xl,
+    },
+
+    title: {
+      fontSize: typography.fontSize.lg,
+      fontWeight: typography.fontWeight.medium,
+      color: colors[theme].text,
+      marginBottom: spacing.xs,
     },
 
     subtitle: {

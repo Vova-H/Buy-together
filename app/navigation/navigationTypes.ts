@@ -1,6 +1,7 @@
 export type RootStackParamList = {
   AuthStack: undefined;
   MainTabs: undefined;
+  ListDetailsScreen: { listId: string };
 };
 
 export type AuthStackParamList = {

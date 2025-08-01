@@ -8,6 +8,7 @@ import {
   onAuthStateChanged,
 } from '@react-native-firebase/auth';
 import Loader from '../components/ui/Loader.tsx';
+import ListDetailsScreen from '../screens/ListDetailsScreen.tsx';
 
 const Stack = createNativeStackNavigator();
 
@@ -29,7 +30,10 @@ const StackNavigator = () => {
   ) : (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
       {user ? (
-        <Stack.Screen name="MainTabs" component={BottomTabsNavigator} />
+        <>
+          <Stack.Screen name="MainTabs" component={BottomTabsNavigator} />
+          <Stack.Screen name="ListDetailsScreen" component={ListDetailsScreen} />
+        </>
       ) : (
         <Stack.Screen name="AuthStack" component={AuthStackNavigator} />
       )}

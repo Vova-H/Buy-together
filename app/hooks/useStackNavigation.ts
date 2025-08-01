@@ -1,6 +1,9 @@
 import { useNavigation } from '@react-navigation/native';
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import type { AuthStackParamList } from '../navigation/navigationTypes.ts';
+import type {
+  AuthStackParamList,
+  RootStackParamList,
+} from '../navigation/navigationTypes.ts';
 
 export const useStackNavigation = () => {
   const navigation =
@@ -14,3 +17,5 @@ export const useStackNavigation = () => {
     reset: navigation.reset,
   };
 };
+export const useRootNavigation = () =>
+  useNavigation<NativeStackNavigationProp<RootStackParamList>>();

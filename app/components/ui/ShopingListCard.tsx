@@ -4,7 +4,9 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { ShoppingList } from '../../interfaces/ShoppingList';
 import { colors, spacing } from '../../constants';
 import { getCardStyles } from '../../../styles/getCardStyles.ts';
+import { getStyles } from '../../../styles/getStyles.ts';
 import formatDataTime from '../../utils/formatDataTime.ts';
+import { useRootNavigation } from '../../hooks/useStackNavigation.ts';
 
 const ShoppingListCard = ({
   list,
@@ -14,24 +16,37 @@ const ShoppingListCard = ({
   theme: 'light' | 'dark';
 }) => {
   const isShared = list._shared;
-  const styles = getCardStyles(theme);
-
-
+  const cardStyles = getCardStyles(theme);
+  const styles = getStyles(theme);
+  const { navigate } = useRootNavigation();
+  const goToListDetails = () => {
+    navigate('ListDetailsScreen', { listId: list.id });
+  };
   return (
     <TouchableOpacity
-      style={[styles.card, { backgroundColor: colors[theme].card }]}
+      onPress={goToListDetails}
+      activeOpacity={1}
+      style={[cardStyles.card, { backgroundColor: colors[theme].card }]}
     >
-      <View style={styles.row}>
+      <View style={cardStyles.row}>
         <Icon
           name="clipboard-text-outline"
           size={28}
           color={colors[theme].primary}
         />
 
-        <View style={{ flex: 1, marginLeft: spacing.sm }}>
-          <Text style={[styles.title, { color: colors[theme].text }]}>
+        <View style={{ marginLeft: spacing.sm, width: '85%' }}>
+          <Text
+            numberOfLines={2}
+            ellipsizeMode="tail"
+            style={[
+              styles.title,
+              { color: colors[theme].text, maxWidth: '100%', height: '70%' },
+            ]}
+          >
             {list.title}
           </Text>
+
           <View
             style={{ flexDirection: 'row', alignItems: 'center', marginTop: 2 }}
           >
@@ -43,28 +58,25 @@ const ShoppingListCard = ({
             />
             <View
               style={{
+                width: '100%',
                 flexDirection: 'row',
                 justifyContent: 'space-between',
-                width: '100%',
-                alignItems: 'center',
               }}
             >
-              <Text style={[styles.subtext, { color: colors[theme].subtext }]}>
+              <Text
+                style={[cardStyles.subtext, { color: colors[theme].subtext }]}
+              >
                 {isShared ? 'Спільний доступ' : 'Тільки ти'}
               </Text>
-              <Text style={{ ...styles.subtext, marginRight: spacing.xl }}>
-                {formatDataTime(list?.createdAt)}
+              <Text style={cardStyles.subtext}>
+                {formatDataTime(list.createdAt)}
               </Text>
             </View>
           </View>
         </View>
-
-        <TouchableOpacity>
-          <Icon name="dots-vertical" size={20} color={colors[theme].subtext} />
-        </TouchableOpacity>
       </View>
     </TouchableOpacity>
   );
 };
 
-export default ShoppingListCard;
+export default React.memo(ShoppingListCard);

@@ -14,6 +14,7 @@ export const getCardStyles = (theme: 'light' | 'dark') =>
       shadowRadius: 6,
       elevation: 4,
       borderWidth: 0.1,
+      height: 88,
     },
     headerRow: {
       flexDirection: 'row',

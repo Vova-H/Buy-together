@@ -1,6 +1,6 @@
 export const colors = {
   light: {
-    background: '#FFFFFF',
+    background: '#f9faf2',
     backgroundSecondary: '#F7F7F7', //карточки, вторичные блоки
     text: '#000000',
     subtext: '#777777',
@@ -11,6 +11,7 @@ export const colors = {
     inputBackground: '#F0F0F0',
     placeholder: '#999999',
     card: '#ffffff',
+    // card: '#f5fdff',
 
     error: '#e74c3c',
     success: '#2ecc71',
